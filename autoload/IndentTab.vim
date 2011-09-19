@@ -1,4 +1,4 @@
-" ContextTab.vim: Use tabs for indent at the beginning, spaces for alignment in
+" IndentTab.vim: Use tabs for indent at the beginning, spaces for alignment in
 " the rest of a line. 
 "
 " DESCRIPTION:
@@ -26,8 +26,9 @@
 " KNOWN PROBLEMS:
 " TODO:
 "
-" Copyright: (C) 2008-2009 by Ingo Karkat
+" Copyright: (C) 2008-2011 by Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'. 
+"
 " Sources: 
 "  - vimscript#231 ctab.vim by Michael Geddes. 
 "  - http://vim.wikia.com/wiki/Converting_tabs_to_spaces
@@ -35,12 +36,16 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS 
+"	003	20-Sep-2011	Add flag g:indenttab / b:indenttab for
+"				statusline and "supertab" integrations. 
+"				Expose mapping result functions for "supertab"
+"				integrations through IndentTab#GetExpr(). 
 "       002     12-Jun-2009     Implemented switching from indenting to
 "				alignment when a single <Space> has been
 "				entered. 
 "	001	20-Aug-2008	file creation
 
-function! s:ContextTab()
+function! IndentTab#Tab()
     let l:textBeforeCursor = strpart(getline('.'), 0, col('.') - 1)
     if &l:expandtab || l:textBeforeCursor =~ (&l:softtabstop ? '^\s*$' : '^\t*$')
 	" If 'expandtab' is on, Vim will do the translation to spaces for us. 
@@ -82,7 +87,7 @@ function! s:ContextTab()
 "****D echomsg '****' l:virtCol . ' '. virtcol('.')  . ' ' . l:off . ' ' . (l:indent - l:off + 1)
     return repeat(' ', l:indent - l:off + 1)
 endfunction
-function! s:ContextBackspace()
+function! IndentTab#Backspace()
     let l:textBeforeCursor = strpart(getline('.'), 0, col('.') - 1)
 
     " Return the ordinary <BS> if we're not deleting a <Space> or if we're in
@@ -106,16 +111,25 @@ function! s:ContextBackspace()
     endif
 endfunction
 
-
 " The context tab can be en-/disabled globally or only for a particular buffer. 
-function! ContextTab#Switch( isTurnOn, isGlobal )
-    let l:scope = (a:isGlobal ? '' : '<buffer>')
+function! IndentTab#Switch( isTurnOn, isGlobal )
+    let l:mappingScope = (a:isGlobal ? '' : '<buffer>')
+    let l:flagScope    = (a:isGlobal ? 'g' : 'b')
+
     if a:isTurnOn
-	execute 'inoremap ' . l:scope . ' <expr> <Tab> <SID>ContextTab()'
-	execute 'inoremap ' . l:scope . ' <expr> <BS> <SID>ContextBackspace()'
-    elseif ! a:isTurnOn
-	execute 'silent! ' . l:scope . ' iunmap <Tab>'
-	execute 'silent! ' . l:scope . ' iunmap <BS>'
+	if ! g:IndentTab_IsSuperTab
+	    execute 'inoremap ' . l:mappingScope . ' <expr> <Tab> IndentTab#Tab()'
+	endif
+	execute 'inoremap ' . l:mappingScope . ' <expr> <BS>  IndentTab#Backspace()'
+
+	execute 'let' l:flagScope . ":indenttab = 'all'"
+    else
+	if ! g:IndentTab_IsSuperTab
+	    execute 'silent! ' . l:mappingScope . ' iunmap <Tab>'
+	endif
+	execute 'silent! ' . l:mappingScope . ' iunmap <BS>'
+
+	execute 'unlet!' l:flagScope . ':indenttab'
     endif
 endfunction
 
