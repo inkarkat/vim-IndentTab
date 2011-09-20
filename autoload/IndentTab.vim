@@ -121,16 +121,13 @@ function! IndentTab#Switch( isTurnOn, isGlobal )
 	    execute 'inoremap ' . l:mappingScope . ' <expr> <Tab> IndentTab#Tab()'
 	endif
 	execute 'inoremap ' . l:mappingScope . ' <expr> <BS>  IndentTab#Backspace()'
-
-	execute 'let' l:flagScope . ":indenttab = 'all'"
     else
 	if ! g:IndentTab_IsSuperTab
 	    execute 'silent! ' . l:mappingScope . ' iunmap <Tab>'
 	endif
 	execute 'silent! ' . l:mappingScope . ' iunmap <BS>'
-
-	execute 'unlet!' l:flagScope . ':indenttab'
     endif
+    execute 'let' l:flagScope . ":indenttab = " (a:isTurnOn ? 1 : 0)
 endfunction
 
 " vim: set sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
