@@ -47,7 +47,7 @@
 
 function! IndentTab#Tab()
     let l:textBeforeCursor = strpart(getline('.'), 0, col('.') - 1)
-    if &l:expandtab || l:textBeforeCursor =~ (&l:softtabstop ? '^\s*$' : '^\t*$')
+    if &l:expandtab || l:textBeforeCursor =~# (&l:softtabstop ? '^\s*$' : '^\t*$')
 	" If 'expandtab' is on, Vim will do the translation to spaces for us. 
 	" In the whitespace-only indent section of the line return the ordinary
 	" <Tab>. Settings like 'softtabstop' are then handled by Vim as if there
@@ -93,7 +93,7 @@ function! IndentTab#Backspace()
     " Return the ordinary <BS> if we're not deleting a <Space> or if we're in
     " the whitespace-only indent section of the line. 
     let l:charBeforeCursor = matchstr(l:textBeforeCursor, '.$')
-    if l:charBeforeCursor != ' ' || l:textBeforeCursor =~ '^\s*$'
+    if l:charBeforeCursor !=# ' ' || l:textBeforeCursor =~# '^\s*$'
 	return "\<BS>"
     endif
 
