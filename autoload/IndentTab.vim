@@ -45,19 +45,30 @@
 "				entered. 
 "	001	20-Aug-2008	file creation
 
-function! IndentTab#Tab()
-    let l:textBeforeCursor = strpart(getline('.'), 0, col('.') - 1)
-    if &l:expandtab || l:textBeforeCursor =~# (&l:softtabstop ? '^\s*$' : '^\t*$')
-	" If 'expandtab' is on, Vim will do the translation to spaces for us. 
-	" In the whitespace-only indent section of the line return the ordinary
-	" <Tab>. Settings like 'softtabstop' are then handled by Vim as if there
-	" were not mapping for <Tab>.
+function! s:IsInScope( textBeforeCursor )
+    let l:isInScope = 0
+    let l:scopes = split(g:IndentTab_scopes, ',')
+
+    if index(l:scopes, 'indent') != -1
 	" For 'softtabstop', "whitespace" means <Tab> and <Space> (which must be
 	" included because part of the indent can consist of spaces), but only
 	" <Tab> when 'softtabstop' is off. This way, one can switch from
 	" indenting to alignment (e.g. when continuing a multi-line statement)
 	" by inserting a single <Space>, and can then finish the alignment
 	" conveniently by pressing <Tab>. 
+	let l:isInScope = l:isInScope || (a:textBeforeCursor =~# (&l:softtabstop ? '^\s*$' : '^\t*$'))
+    endif
+
+    return l:isInScope
+endfunction
+
+function! IndentTab#Tab()
+    let l:textBeforeCursor = strpart(getline('.'), 0, col('.') - 1)
+    if &l:expandtab || s:IsInScope(l:textBeforeCursor)
+	" If 'expandtab' is on, Vim will do the translation to spaces for us. 
+	" In the whitespace-only indent section of the line return the ordinary
+	" <Tab>. Settings like 'softtabstop' are then handled by Vim as if there
+	" were not mapping for <Tab>.
 	return "\<Tab>"
     endif
 
@@ -93,7 +104,7 @@ function! IndentTab#Backspace()
     " Return the ordinary <BS> if we're not deleting a <Space> or if we're in
     " the whitespace-only indent section of the line. 
     let l:charBeforeCursor = matchstr(l:textBeforeCursor, '.$')
-    if l:charBeforeCursor !=# ' ' || l:textBeforeCursor =~# '^\s*$'
+    if l:charBeforeCursor !=# ' ' || s:IsInScope(l:textBeforeCursor)
 	return "\<BS>"
     endif
 
