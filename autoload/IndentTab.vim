@@ -1,41 +1,19 @@
 " IndentTab.vim: Use tabs for indent at the beginning, spaces for alignment in
 " the rest of a line. 
 "
-" DESCRIPTION:
-"   This script allows you to use your normal tab settings ('tabstop',
-"   'smarttabstop', 'expandtab') for the beginning of the line (up to the first
-"   non-whitespace character), and have <Tab> expanded to the appropriate
-"   number of spaces (i.e. like ':set expandtab') anywhere else.
-"   This effectively distinguishes "indenting" from "alignment"; the characters
-"   inserted by <Tab> depend on the local context. 
-" 
-" USAGE:
-"   <Tab>		Uses normal tab settings at the beginning of the line
-"			(before the first non-whitespace character), and inserts
-"			spaces otherwise.
-"   <BS>		Uses normal tab settings to delete tabs at the beginning
-"			of the line; elsewhere it also removes "space-expanded"
-"			tabs as if 'softtabstop' were enabled. 
-"
-" INSTALLATION:
 " DEPENDENCIES:
-" CONFIGURATION:
-" INTEGRATION:
-" LIMITATIONS:
-" ASSUMPTIONS:
-" KNOWN PROBLEMS:
-" TODO:
+"   - IndentTab/CommentPrefix.vim autoload script. 
 "
 " Copyright: (C) 2008-2011 by Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'. 
 "
-" Sources: 
-"  - vimscript#231 ctab.vim by Michael Geddes. 
-"  - http://vim.wikia.com/wiki/Converting_tabs_to_spaces
-"
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS 
+"	004     21-Sep-2011     Factor out s:IsInScope() to check for indent
+"				before cursor (and then the other scopes from
+"				g:IndentTab_scopes). 
+"				Implement "commentprefix" scope. 
 "	003	20-Sep-2011	Add flag g:indenttab / b:indenttab for
 "				statusline and "supertab" integrations. 
 "				Expose mapping result functions for "supertab"
@@ -54,9 +32,12 @@ function! s:IsInScope( textBeforeCursor )
 	" included because part of the indent can consist of spaces), but only
 	" <Tab> when 'softtabstop' is off. This way, one can switch from
 	" indenting to alignment (e.g. when continuing a multi-line statement)
-	" by inserting a single <Space>, and can then finish the alignment
-	" conveniently by pressing <Tab>. 
+	" for 'tabstop' by inserting a single <Space>, and can then finish the
+	" alignment conveniently by pressing <Tab>. 
 	let l:isInScope = l:isInScope || (a:textBeforeCursor =~# (&l:softtabstop ? '^\s*$' : '^\t*$'))
+    endif
+    if index(l:scopes, 'commentprefix') != -1
+	let l:isInScope = l:isInScope || IndentTab#CommentPrefix#IsIndentAfterCommentPrefix(a:textBeforeCursor)
     endif
 
     return l:isInScope
