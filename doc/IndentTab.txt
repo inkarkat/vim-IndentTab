@@ -1,0 +1,109 @@
+*IndentTab.txt*         Use tabs for indent at the beginning, spaces for alignment in the rest of a line. 
+
+			 INDENT TAB    by Ingo Karkat
+							       *IndentTab.vim*
+description			|IndentTab-description|
+usage				|IndentTab-usage|
+installation			|IndentTab-installation|
+configuration			|IndentTab-configuration|
+integration			|IndentTab-integration|
+limitations			|IndentTab-limitations|
+known problems			|IndentTab-known-problems|
+todo				|IndentTab-todo|
+history				|IndentTab-history|
+
+==============================================================================
+DESCRIPTION					       *IndentTab-description*
+
+This plugin allows you to use your normal tab settings ('tabstop',
+'smarttabstop', 'expandtab') for the beginning of the line (up to the first
+non-whitespace character), and have <Tab> expanded to the appropriate number
+of spaces (i.e. like ':set expandtab') anywhere else. This effectively
+distinguishes "indenting" from "alignment"; the characters inserted by <Tab>
+depend on the local context. 
+
+HOW IT WORKS								     *
+
+RELATED WORKS								     *
+
+- vimscript #231 ctab.vim by Michael Geddes. 
+- http://vim.wikia.com/wiki/Converting_tabs_to_spaces
+
+==============================================================================
+USAGE							     *IndentTab-usage*
+
+<Tab>			Uses normal tab settings at the beginning of the line
+			(before the first non-whitespace character), and
+			inserts spaces otherwise.
+<BS>			Uses normal tab settings to delete tabs at the
+			beginning of the line; elsewhere it also removes
+			"space-expanded" tabs as if 'softtabstop' were
+			enabled. 
+
+EXAMPLE							   *IndentTab-example*
+
+==============================================================================
+INSTALLATION					      *IndentTab-installation*
+
+This script is packaged as a |vimball|. If you have the "gunzip" decompressor
+in your PATH, simply edit the *.vba.gz package in Vim; otherwise, decompress
+the archive first, e.g. using WinZip. Inside Vim, install by sourcing the
+vimball or via the |:UseVimball| command. >
+    vim IndentTab.vba.gz
+    :so %
+To uninstall, use the |:RmVimball| command. 
+
+DEPENDENCIES					      *IndentTab-dependencies*
+
+- Requires Vim 7.0 or higher. 
+
+==============================================================================
+CONFIGURATION					     *IndentTab-configuration*
+
+For a permanent configuration, put the following commands into your |vimrc|: 
+
+							  *g:IndentTab_scopes*
+Determine where the buffer's indent settings are applied. Elsewhere, spaces
+are used for alignment. Comma-separated list of the following values: 
+    indent:         Initial whitespace at the beginning of a line. 
+    commentprefix:  Also after comment prefix. 
+    comment:        Inside comments, as determined by syntax highlighting. 
+    string:         Inside strings, as determined by syntax highlighting. >
+    let g:IndentTab_scopes = 'indent,commentprefix,string'
+<
+==============================================================================
+INTEGRATION					       *IndentTab-integration*
+
+To determine whether the 'indenttab' setting is active in the current buffer,
+you can call IndentTab#Info#indenttab(), which yields a boolean value. This
+can be used as a replacement for a hypothetical ":set indenttab?", e.g. in a
+custom 'statusline'. 
+
+SUPERTAB INTEGRATION							     *
+TODO
+
+==============================================================================
+LIMITATIONS					       *IndentTab-limitations*
+
+KNOWN PROBLEMS					    *IndentTab-known-problems*
+
+TODO							      *IndentTab-todo*
+
+IDEAS							     *IndentTab-ideas*
+
+==============================================================================
+HISTORY							   *IndentTab-history*
+
+1.00	21-Sep-2011
+First published version. 
+
+0.01	20-Aug-2008
+Started development. 
+
+==============================================================================
+Copyright: (C) 2008-2011 Ingo Karkat
+The VIM LICENSE applies to this script; see |copyright|. 
+
+Maintainer:	Ingo Karkat <ingo@karkat.de>
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
