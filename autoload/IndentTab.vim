@@ -3,6 +3,7 @@
 "
 " DEPENDENCIES:
 "   - IndentTab/CommentPrefix.vim autoload script. 
+"   - IndentTab/Syntax.vim autoload script. 
 "
 " Copyright: (C) 2008-2011 by Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'. 
@@ -10,6 +11,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS 
+"	005	22-Sep-2011	Implement "comment" and "string" syntax scopes. 
 "	004     21-Sep-2011     Factor out s:IsInScope() to check for indent
 "				before cursor (and then the other scopes from
 "				g:IndentTab_scopes). 
@@ -38,6 +40,12 @@ function! s:IsInScope( textBeforeCursor )
     endif
     if index(l:scopes, 'commentprefix') != -1
 	let l:isInScope = l:isInScope || IndentTab#CommentPrefix#IsIndentAfterCommentPrefix(a:textBeforeCursor)
+    endif
+    if index(l:scopes, 'comment') != -1
+	let l:isInScope = l:isInScope || IndentTab#Syntax#IsInSyntax('^Comment$')
+    endif
+    if index(l:scopes, 'string') != -1
+	let l:isInScope = l:isInScope || IndentTab#Syntax#IsInSyntax('^\%(String\|Constant\)$')
     endif
 
     return l:isInScope
