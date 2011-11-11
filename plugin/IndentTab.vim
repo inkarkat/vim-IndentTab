@@ -2,6 +2,8 @@
 " the rest of a line. 
 "
 " DEPENDENCIES:
+"   - Requires Vim 7.0 or higher. 
+"   - IndentTab.vim autoload script. 
 "
 " Copyright: (C) 2008-2011 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'. 
@@ -20,8 +22,20 @@ if exists('g:loaded_IndentTab') || (v:version < 700)
 endif
 let g:loaded_IndentTab = 1
 
+if ! exists('g:IndentTab_scopes')
+    let g:IndentTab_scopes = 'indent,commentprefix,string'
+endif
+
 if ! exists('g:IndentTab_IsSuperTab')
     let g:IndentTab_IsSuperTab = 0
+endif
+
+if ! exists('g:indenttab')
+    let g:indenttab = 0
+endif
+if g:indenttab
+    " Enable on startup if desired. 
+    call IndentTab#Switch(1, 1)
 endif
 
 " vim: set sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
