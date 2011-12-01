@@ -130,4 +130,4 @@ function! IndentTab#Switch( isTurnOn, isGlobal )
     execute 'let' l:flagScope . ":indenttab = " (a:isTurnOn ? 1 : 0)
 endfunction
 
-" vim: set sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
+" vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
