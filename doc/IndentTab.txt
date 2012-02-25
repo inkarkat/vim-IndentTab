@@ -32,6 +32,9 @@ RELATED WORKS								     *
 ==============================================================================
 USAGE							     *IndentTab-usage*
 
+The indent tab can be en-/disabled globally or only for a particular buffer. >
+    call IndentTab#Switch( isTurnOn, isGlobal )
+<
 <Tab>			Uses normal tab settings at the beginning of the line
 			(before the first non-whitespace character), and
 			inserts spaces otherwise.
@@ -89,6 +92,8 @@ LIMITATIONS					       *IndentTab-limitations*
 KNOWN PROBLEMS					    *IndentTab-known-problems*
 
 TODO							      *IndentTab-todo*
+
+- Implement better way of en-/dis-abling. :IndentTab[!] :IndentTabLocal[!]? 
 
 IDEAS							     *IndentTab-ideas*
 
