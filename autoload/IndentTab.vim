@@ -111,7 +111,7 @@ function! IndentTab#Backspace()
     endif
 endfunction
 
-" The context tab can be en-/disabled globally or only for a particular buffer. 
+" The indent tab can be en-/disabled globally or only for a particular buffer. 
 function! IndentTab#Switch( isTurnOn, isGlobal )
     let l:mappingScope = (a:isGlobal ? '' : '<buffer>')
     let l:flagScope    = (a:isGlobal ? 'g' : 'b')
