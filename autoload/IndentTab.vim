@@ -5,12 +5,15 @@
 "   - IndentTab/CommentPrefix.vim autoload script. 
 "   - IndentTab/Syntax.vim autoload script. 
 "
-" Copyright: (C) 2008-2011 by Ingo Karkat
+" Copyright: (C) 2008-2012 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'. 
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS 
+"	006	26-Feb-2012	Renamed g:indenttab to g:IndentTab to match
+"				plugin name. 
+"				Renamed IndentTab#Switch() to IndentTab#Set(). 
 "	005	22-Sep-2011	Implement "comment" and "string" syntax scopes. 
 "	004     21-Sep-2011     Factor out s:IsInScope() to check for indent
 "				before cursor (and then the other scopes from
@@ -112,22 +115,22 @@ function! IndentTab#Backspace()
 endfunction
 
 " The indent tab can be en-/disabled globally or only for a particular buffer. 
-function! IndentTab#Switch( isTurnOn, isGlobal )
+function! IndentTab#Set( isTurnOn, isGlobal )
     let l:mappingScope = (a:isGlobal ? '' : '<buffer>')
     let l:flagScope    = (a:isGlobal ? 'g' : 'b')
 
     if a:isTurnOn
 	if ! g:IndentTab_IsSuperTab
-	    execute 'inoremap ' . l:mappingScope . ' <expr> <Tab> IndentTab#Tab()'
+	    execute 'inoremap' l:mappingScope '<expr> <Tab> IndentTab#Tab()'
 	endif
-	execute 'inoremap ' . l:mappingScope . ' <expr> <BS>  IndentTab#Backspace()'
+	    execute 'inoremap' l:mappingScope '<expr> <BS>  IndentTab#Backspace()'
     else
 	if ! g:IndentTab_IsSuperTab
-	    execute 'silent! ' . l:mappingScope . ' iunmap <Tab>'
+	    silent! execute l:mappingScope 'iunmap <Tab>'
 	endif
-	execute 'silent! ' . l:mappingScope . ' iunmap <BS>'
+	    silent! execute l:mappingScope 'iunmap <BS>'
     endif
-    execute 'let' l:flagScope . ":indenttab = " (a:isTurnOn ? 1 : 0)
+    execute 'let' l:flagScope . ':IndentTab =' (!! a:isTurnOn)
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
