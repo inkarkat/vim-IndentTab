@@ -5,12 +5,13 @@
 "   - Requires Vim 7.0 or higher. 
 "   - IndentTab.vim autoload script. 
 "
-" Copyright: (C) 2008-2011 Ingo Karkat
+" Copyright: (C) 2008-2012 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'. 
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS 
+"	002	26-Feb-2012	Renamed IndentTab#Switch() to IndentTab#Set(). 
 "	001	20-Sep-2011	Enable supertab integrations through
 "				g:IndentTab_IsSuperTab (which disables the
 "				remapping of <Tab>). 
@@ -35,7 +36,7 @@ if ! exists('g:indenttab')
 endif
 if g:indenttab
     " Enable on startup if desired. 
-    call IndentTab#Switch(1, 1)
+    call IndentTab#Set(1, 1)
 endif
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
