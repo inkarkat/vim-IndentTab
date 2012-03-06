@@ -14,6 +14,7 @@
 "	006	26-Feb-2012	Renamed g:indenttab to g:IndentTab to match
 "				plugin name. 
 "				Renamed IndentTab#Switch() to IndentTab#Set(). 
+"				Add IndentTab#Reset() and IndentTab#Toggle(). 
 "	005	22-Sep-2011	Implement "comment" and "string" syntax scopes. 
 "	004     21-Sep-2011     Factor out s:IsInScope() to check for indent
 "				before cursor (and then the other scopes from
@@ -116,21 +117,39 @@ endfunction
 
 " The indent tab can be en-/disabled globally or only for a particular buffer. 
 function! IndentTab#Set( isTurnOn, isGlobal )
-    let l:mappingScope = (a:isGlobal ? '' : '<buffer>')
-    let l:flagScope    = (a:isGlobal ? 'g' : 'b')
-
     if a:isTurnOn
+	let l:mappingScope = (a:isGlobal ? '' : '<buffer>')
 	if ! g:IndentTab_IsSuperTab
 	    execute 'inoremap' l:mappingScope '<expr> <Tab> IndentTab#Tab()'
 	endif
 	    execute 'inoremap' l:mappingScope '<expr> <BS>  IndentTab#Backspace()'
-    else
+    elseif a:isGlobal
 	if ! g:IndentTab_IsSuperTab
-	    silent! execute l:mappingScope 'iunmap <Tab>'
+	    silent! iunmap <Tab>
 	endif
-	    silent! execute l:mappingScope 'iunmap <BS>'
+	    silent! iunmap <BS>
+    else
+	" To turn off the buffer-local setting (when the global settting is
+	" active, but it could be activated later on), a buffer-local mapping
+	" needs to neutralize the global mapping. To do away with the
+	" buffer-local setting, use IndentTab#Reset(). 
+	if ! g:IndentTab_IsSuperTab
+	    silent! inoremap <buffer> <Tab> <Tab>
+	endif
+	    silent! inoremap <buffer> <BS> <BS>
     endif
-    execute 'let' l:flagScope . ':IndentTab =' (!! a:isTurnOn)
+
+    execute 'let' (a:isGlobal ? 'g' : 'b') . ':IndentTab =' (!! a:isTurnOn)
+endfunction
+function! IndentTab#Reset()
+    if ! g:IndentTab_IsSuperTab
+	silent! iunmap <buffer> <Tab>
+    endif
+	silent! iunmap <buffer> <BS>
+    unlet! b:IndentTab
+endfunction
+function! IndentTab#Toggle( isGlobal )
+    call IndentTab#Set(! (a:isGlobal ? g:IndentTab : IndentTab#Info#IndentTab()), a:isGlobal)
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
