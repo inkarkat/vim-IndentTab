@@ -11,6 +11,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS 
+"	003	06-Mar-2012	Renamed g:indenttab to g:IndentTab to match
+"				plugin name. 
 "	002	26-Feb-2012	Renamed IndentTab#Switch() to IndentTab#Set(). 
 "	001	20-Sep-2011	Enable supertab integrations through
 "				g:IndentTab_IsSuperTab (which disables the
@@ -31,10 +33,10 @@ if ! exists('g:IndentTab_IsSuperTab')
     let g:IndentTab_IsSuperTab = 0
 endif
 
-if ! exists('g:indenttab')
-    let g:indenttab = 0
+if ! exists('g:IndentTab')
+    let g:IndentTab = 0
 endif
-if g:indenttab
+if g:IndentTab
     " Enable on startup if desired. 
     call IndentTab#Set(1, 1)
 endif
