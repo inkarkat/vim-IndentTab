@@ -11,6 +11,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS 
+"	007     07-Mar-2012     BUG: Undefined variable l:softtabstop.
 "	006	26-Feb-2012	Renamed g:indenttab to g:IndentTab to match
 "				plugin name. 
 "				Renamed IndentTab#Switch() to IndentTab#Set(). 
@@ -106,7 +107,7 @@ function! IndentTab#Backspace()
     " 'softtabstop', if not already enabled. This relieves us from calculating
     " the correct amount of <BS> keys (which also depend on the 'softtabstop'
     " setting). 
-    if &l:expandtab && l:softtabstop
+    if &l:expandtab && &l:softtabstop
 	return "\<BS>"
     else
 	let l:tempOn  = "\<C-\>\<C-o>:set" . (&l:expandtab ? '' : ' et')   . (&l:softtabstop ? '' : ' sts=' . &l:tabstop) . "\<CR>"
