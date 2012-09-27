@@ -33,7 +33,7 @@ RELATED WORKS								     *
 USAGE							     *IndentTab-usage*
 
 The indent tab can be en-/disabled globally or only for a particular buffer. >
-    call IndentTab#Switch( isTurnOn, isGlobal )
+    call IndentTab#Set( isTurnOn, isGlobal )
 <
 <Tab>			Uses normal tab settings at the beginning of the line
 			(before the first non-whitespace character), and
@@ -79,7 +79,7 @@ are used for alignment. Comma-separated list of the following values:
 INTEGRATION					       *IndentTab-integration*
 
 To determine whether the 'indenttab' setting is active in the current buffer,
-you can call IndentTab#Info#indenttab(), which yields a boolean value. This
+you can call IndentTab#Info#IndentTab(), which yields a boolean value. This
 can be used as a replacement for a hypothetical ":set indenttab?", e.g. in a
 custom 'statusline'. 
 
