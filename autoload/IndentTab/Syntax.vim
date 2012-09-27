@@ -19,4 +19,4 @@ function! IndentTab#Syntax#IsInSyntax( syntaxItemPattern )
     return ingointegration#IsOnSyntaxItem([0, line('.'), col('.') - 1, 0], a:syntaxItemPattern)
 endfunction
 
-" vim: set sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
+" vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
