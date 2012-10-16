@@ -1,33 +1,33 @@
 " IndentTab.vim: Use tabs for indent at the beginning, spaces for alignment in
-" the rest of a line. 
+" the rest of a line.
 "
 " DEPENDENCIES:
-"   - IndentTab/CommentPrefix.vim autoload script. 
-"   - IndentTab/Syntax.vim autoload script. 
+"   - IndentTab/CommentPrefix.vim autoload script.
+"   - IndentTab/Syntax.vim autoload script.
 "
 " Copyright: (C) 2008-2012 Ingo Karkat
-"   The VIM LICENSE applies to this script; see ':help copyright'. 
+"   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
-" REVISION	DATE		REMARKS 
-"	007     07-Mar-2012     BUG: Undefined variable l:softtabstop.
+" REVISION	DATE		REMARKS
+"   1.00.007	07-Mar-2012	BUG: Undefined variable l:softtabstop.
 "	006	26-Feb-2012	Renamed g:indenttab to g:IndentTab to match
-"				plugin name. 
-"				Renamed IndentTab#Switch() to IndentTab#Set(). 
-"				Add IndentTab#Reset() and IndentTab#Toggle(). 
-"	005	22-Sep-2011	Implement "comment" and "string" syntax scopes. 
+"				plugin name.
+"				Renamed IndentTab#Switch() to IndentTab#Set().
+"				Add IndentTab#Reset() and IndentTab#Toggle().
+"	005	22-Sep-2011	Implement "comment" and "string" syntax scopes.
 "	004     21-Sep-2011     Factor out s:IsInScope() to check for indent
 "				before cursor (and then the other scopes from
-"				g:IndentTab_scopes). 
-"				Implement "commentprefix" scope. 
+"				g:IndentTab_scopes).
+"				Implement "commentprefix" scope.
 "	003	20-Sep-2011	Add flag g:indenttab / b:indenttab for
-"				statusline and "supertab" integrations. 
+"				statusline and "supertab" integrations.
 "				Expose mapping result functions for "supertab"
-"				integrations through IndentTab#GetExpr(). 
+"				integrations through IndentTab#GetExpr().
 "       002     12-Jun-2009     Implemented switching from indenting to
 "				alignment when a single <Space> has been
-"				entered. 
+"				entered.
 "	001	20-Aug-2008	file creation
 
 function! s:IsInScope( textBeforeCursor )
@@ -40,7 +40,7 @@ function! s:IsInScope( textBeforeCursor )
 	" <Tab> when 'softtabstop' is off. This way, one can switch from
 	" indenting to alignment (e.g. when continuing a multi-line statement)
 	" for 'tabstop' by inserting a single <Space>, and can then finish the
-	" alignment conveniently by pressing <Tab>. 
+	" alignment conveniently by pressing <Tab>.
 	let l:isInScope = l:isInScope || (a:textBeforeCursor =~# (&l:softtabstop ? '^\s*$' : '^\t*$'))
     endif
     if index(l:scopes, 'commentprefix') != -1
@@ -59,7 +59,7 @@ endfunction
 function! IndentTab#Tab()
     let l:textBeforeCursor = strpart(getline('.'), 0, col('.') - 1)
     if &l:expandtab || s:IsInScope(l:textBeforeCursor)
-	" If 'expandtab' is on, Vim will do the translation to spaces for us. 
+	" If 'expandtab' is on, Vim will do the translation to spaces for us.
 	" In the whitespace-only indent section of the line return the ordinary
 	" <Tab>. Settings like 'softtabstop' are then handled by Vim as if there
 	" were not mapping for <Tab>.
@@ -67,7 +67,7 @@ function! IndentTab#Tab()
     endif
 
     " For the space-only text section of the line, determine and return the
-    " correct amount of spaces. 
+    " correct amount of spaces.
     let l:indent = (&l:softtabstop == 0 ? &l:tabstop : &l:softtabstop)
 
     " Note: The simple virtcol('.') is wrong when the character under the cursor
@@ -96,7 +96,7 @@ function! IndentTab#Backspace()
     let l:textBeforeCursor = strpart(getline('.'), 0, col('.') - 1)
 
     " Return the ordinary <BS> if we're not deleting a <Space> or if we're in
-    " the whitespace-only indent section of the line. 
+    " the whitespace-only indent section of the line.
     let l:charBeforeCursor = matchstr(l:textBeforeCursor, '.$')
     if l:charBeforeCursor !=# ' ' || s:IsInScope(l:textBeforeCursor)
 	return "\<BS>"
@@ -106,7 +106,7 @@ function! IndentTab#Backspace()
     " correct amount of spaces by temporarily turning on 'expandtab' and
     " 'softtabstop', if not already enabled. This relieves us from calculating
     " the correct amount of <BS> keys (which also depend on the 'softtabstop'
-    " setting). 
+    " setting).
     if &l:expandtab && &l:softtabstop
 	return "\<BS>"
     else
@@ -116,7 +116,7 @@ function! IndentTab#Backspace()
     endif
 endfunction
 
-" The indent tab can be en-/disabled globally or only for a particular buffer. 
+" The indent tab can be en-/disabled globally or only for a particular buffer.
 function! IndentTab#Set( isTurnOn, isGlobal )
     if a:isTurnOn
 	let l:mappingScope = (a:isGlobal ? '' : '<buffer>')
@@ -133,7 +133,7 @@ function! IndentTab#Set( isTurnOn, isGlobal )
 	" To turn off the buffer-local setting (when the global settting is
 	" active, but it could be activated later on), a buffer-local mapping
 	" needs to neutralize the global mapping. To do away with the
-	" buffer-local setting, use IndentTab#Reset(). 
+	" buffer-local setting, use IndentTab#Reset().
 	if ! g:IndentTab_IsSuperTab
 	    silent! inoremap <buffer> <Tab> <Tab>
 	endif
