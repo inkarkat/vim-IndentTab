@@ -117,7 +117,7 @@ IDEAS							     *IndentTab-ideas*
 ==============================================================================
 HISTORY							   *IndentTab-history*
 
-1.10	TODO
+1.10	RELEASEME
 The scope tests that use syntax highlighting can be wrong when there's no
 separating whitespace. To properly detect the scope, we need to first insert
 whitespace, then perform the scope tests that use syntax highlighting.
