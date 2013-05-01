@@ -11,6 +11,11 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.10.008	17-Oct-2012	The scope tests that use syntax highlighting can
+"				be wrong when there's no separating whitespace.
+"				To properly detect the scope, we need to first
+"				insert whitespace, then perform the scope tests
+"				that use syntax highlighting.
 "   1.00.007	07-Mar-2012	BUG: Undefined variable l:softtabstop.
 "	006	26-Feb-2012	Renamed g:indenttab to g:IndentTab to match
 "				plugin name.
@@ -30,6 +35,9 @@
 "				entered.
 "	001	20-Aug-2008	file creation
 
+function! s:TextBeforeCursor()
+    return strpart(getline('.'), 0, col('.') - 1)
+endfunction
 function! s:IsInScope( textBeforeCursor )
     let l:isInScope = 0
     let l:scopes = split(g:IndentTab_scopes, ',')
@@ -56,10 +64,34 @@ function! s:IsInScope( textBeforeCursor )
     return l:isInScope
 endfunction
 
+let s:isInScope = 0
+function! IndentTab#ScopeTest()
+    let s:isInScope = s:IsInScope(s:TextBeforeCursor())
+    return ''
+endfunction
 function! IndentTab#Tab()
-    let l:textBeforeCursor = strpart(getline('.'), 0, col('.') - 1)
-    if &l:expandtab || s:IsInScope(l:textBeforeCursor)
+    if &l:expandtab
 	" If 'expandtab' is on, Vim will do the translation to spaces for us.
+	return "\<Tab>"
+    endif
+
+    let l:scopes = split(g:IndentTab_scopes, ',')
+    if index(l:scopes, 'comment') != -1 || index(l:scopes, 'string') != -1
+	" The scope tests that use syntax highlighting can be wrong when there's
+	" no separating whitespace. For example, in Vimscript, take: \'string'.
+	" When indenting after the \, the backslash is interpreted as belonging
+	" to vimString syntax group, even though it retains its vimContinue
+	" effective hlgroup. To properly detect the scope, we need to first
+	" insert whitespace, then perform the scope tests that use syntax
+	" highlighting.
+	return " \<C-r>=IndentTab#ScopeTest()\<CR>\<BS>\<C-r>=IndentTab#Indent()\<CR>"
+    else
+	let s:isInScope = s:IsInScope(s:TextBeforeCursor())
+	return IndentTab#Indent()
+    endif
+endfunction
+function! IndentTab#Indent()
+    if s:isInScope
 	" In the whitespace-only indent section of the line return the ordinary
 	" <Tab>. Settings like 'softtabstop' are then handled by Vim as if there
 	" were not mapping for <Tab>.
@@ -83,6 +115,7 @@ function! IndentTab#Tab()
     " before the cursor from the overall length up to the cursor.
     " (Alternatively, this could also be done via a match with the \%<c regexp
     " item.)
+    let l:textBeforeCursor = s:TextBeforeCursor()
     "let l:colBeforeCursor = strlen(matchstr(l:textBeforeCursor, '^.*\%<' . col('.') . 'c')) + 1
     let l:colBeforeCursor = strlen(l:textBeforeCursor) - strlen(matchstr(l:textBeforeCursor, '.$')) + 1
     let l:virtCol = virtcol([line('.'), l:colBeforeCursor]) + 1
@@ -93,7 +126,7 @@ function! IndentTab#Tab()
     return repeat(' ', l:indent - l:off + 1)
 endfunction
 function! IndentTab#Backspace()
-    let l:textBeforeCursor = strpart(getline('.'), 0, col('.') - 1)
+    let l:textBeforeCursor = s:TextBeforeCursor()
 
     " Return the ordinary <BS> if we're not deleting a <Space> or if we're in
     " the whitespace-only indent section of the line.
