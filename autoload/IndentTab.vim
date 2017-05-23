@@ -5,12 +5,16 @@
 "   - IndentTab/CommentPrefix.vim autoload script.
 "   - IndentTab/Syntax.vim autoload script.
 "
-" Copyright: (C) 2008-2012 Ingo Karkat
+" Copyright: (C) 2008-2013 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.10.009	02-May-2013	FIX: We must not consider the space character
+"				that has been temporarily inserted for the scope
+"				tests; otherwise, the scope test will yield
+"				false results for pure 'tabstop' indents.
 "   1.10.008	17-Oct-2012	The scope tests that use syntax highlighting can
 "				be wrong when there's no separating whitespace.
 "				To properly detect the scope, we need to first
@@ -66,7 +70,15 @@ endfunction
 
 let s:isInScope = 0
 function! IndentTab#ScopeTest()
-    let s:isInScope = s:IsInScope(s:TextBeforeCursor())
+    let l:textBeforeCursor = s:TextBeforeCursor()
+
+    " We must not consider the space character that has been temporarily
+    " inserted for the scope tests; otherwise, the scope test will yield false
+    " results for pure 'tabstop' indents.
+    if l:textBeforeCursor[-1:] != ' '
+	throw 'ASSERT: Where is the space character that I temporarily inserted?!'
+    endif
+    let s:isInScope = s:IsInScope(l:textBeforeCursor[0:-2])
     return ''
 endfunction
 function! IndentTab#Tab()
