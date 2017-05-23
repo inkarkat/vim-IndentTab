@@ -1,7 +1,7 @@
 " IndentTab/Syntax.vim: IndentTab detection of syntax scopes.
 "
 " DEPENDENCIES:
-"   - ingointegration.vim autoload script.
+"   - ingo/syntaxitem.vim autoload script
 "
 " Copyright: (C) 2011 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
@@ -9,6 +9,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.10.002	02-May-2013	Move ingointegration#IsOnSyntaxItem() to
+"				ingo#syntaxitem#IsOnSyntax() in ingo-library.
 "   1.00.001	22-Sep-2011	file creation
 
 function! IndentTab#Syntax#IsInSyntax( syntaxItemPattern )
@@ -20,7 +22,7 @@ function! IndentTab#Syntax#IsInSyntax( syntaxItemPattern )
     " the middle of the character's representation. Fortunately, Vim seems to
     " handle that well, so we get around the complex arithmetics to do this
     " right.
-    return ingointegration#IsOnSyntaxItem([0, line('.'), col('.') - 1, 0], a:syntaxItemPattern)
+    return ingo#syntaxitem#IsOnSyntax([0, line('.'), col('.') - 1, 0], a:syntaxItemPattern)
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
