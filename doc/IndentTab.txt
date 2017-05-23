@@ -69,6 +69,8 @@ To uninstall, use the |:RmVimball| command.
 DEPENDENCIES					      *IndentTab-dependencies*
 
 - Requires Vim 7.0 or higher.
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.005 or
+  higher.
 
 ==============================================================================
 CONFIGURATION					     *IndentTab-configuration*
@@ -117,10 +119,13 @@ IDEAS							     *IndentTab-ideas*
 ==============================================================================
 HISTORY							   *IndentTab-history*
 
-1.10	RELEASEME
-The scope tests that use syntax highlighting can be wrong when there's no
-separating whitespace. To properly detect the scope, we need to first insert
-whitespace, then perform the scope tests that use syntax highlighting.
+1.10	02-May-2013
+- The scope tests that use syntax highlighting can be wrong when there's no
+  separating whitespace. To properly detect the scope, we need to first insert
+  whitespace, then perform the scope tests that use syntax highlighting.
+- FIX: In IndentTab#SuperTabIntegration#GetExpr(), prefer buffer-local setting
+  over global one to correctly implement the precedence.
+- Add dependency to ingo-library (vimscript #4433).
 
 1.00	28-Sep-2012
 First published version.
@@ -129,7 +134,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2008-2012 Ingo Karkat
+Copyright: (C) 2008-2013 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
