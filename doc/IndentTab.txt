@@ -69,7 +69,7 @@ To uninstall, use the |:RmVimball| command.
 DEPENDENCIES					      *IndentTab-dependencies*
 
 - Requires Vim 7.0 or higher.
-- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.005 or
+- Requires the |ingo-library.vim| plugin (vimscript #4433), version 1.030 or
   higher.
 
 ==============================================================================
@@ -119,6 +119,11 @@ IDEAS							     *IndentTab-ideas*
 ==============================================================================
 HISTORY							   *IndentTab-history*
 
+1.11	RELEASEME
+- ENH: Support a:stopItemPattern in ingointegration#IsOnSyntaxItem(). Stop
+  looking for comment syntax name below /FoldMarker$/.
+  *** You need to update to ingo-library (vimscript #4433) version 1.030! ***
+
 1.10	02-May-2013
 - The scope tests that use syntax highlighting can be wrong when there's no
   separating whitespace. To properly detect the scope, we need to first insert
@@ -134,7 +139,7 @@ First published version.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2008-2013 Ingo Karkat
+Copyright: (C) 2008-2017 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
