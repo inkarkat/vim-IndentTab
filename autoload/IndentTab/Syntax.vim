@@ -3,7 +3,7 @@
 " DEPENDENCIES:
 "   - ingo/syntaxitem.vim autoload script
 "
-" Copyright: (C) 2011-2017 Ingo Karkat
+" Copyright: (C) 2011-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -24,7 +24,7 @@ function! IndentTab#Syntax#IsInSyntax( syntaxItemPattern, ... )
     " the middle of the character's representation. Fortunately, Vim seems to
     " handle that well, so we get around the complex arithmetics to do this
     " right.
-    return call('ingo#syntaxitem#IsOnSyntax', [[0, line('.'), col('.') - 1, 0], a:syntaxItemPattern] + a:000)
+    return call('ingo#syntaxitem#IsOnSyntax', [ingo#pos#Make4(line('.'), col('.') - 1), a:syntaxItemPattern] + a:000)
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
