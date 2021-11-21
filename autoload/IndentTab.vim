@@ -5,12 +5,14 @@
 "   - IndentTab/CommentPrefix.vim autoload script.
 "   - IndentTab/Syntax.vim autoload script.
 "
-" Copyright: (C) 2008-2013 Ingo Karkat
+" Copyright: (C) 2008-2017 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"   1.11.010	24-May-2017	Stop looking for comment syntax name below
+"				/FoldMarker$/.
 "   1.10.009	02-May-2013	FIX: We must not consider the space character
 "				that has been temporarily inserted for the scope
 "				tests; otherwise, the scope test will yield
@@ -59,7 +61,7 @@ function! s:IsInScope( textBeforeCursor )
 	let l:isInScope = l:isInScope || IndentTab#CommentPrefix#IsIndentAfterCommentPrefix(a:textBeforeCursor)
     endif
     if index(l:scopes, 'comment') != -1
-	let l:isInScope = l:isInScope || IndentTab#Syntax#IsInSyntax('^Comment$')
+	let l:isInScope = l:isInScope || IndentTab#Syntax#IsInSyntax('^Comment$', 'FoldMarker$')
     endif
     if index(l:scopes, 'string') != -1
 	let l:isInScope = l:isInScope || IndentTab#Syntax#IsInSyntax('^\%(String\|Constant\)$')
