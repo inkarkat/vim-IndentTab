@@ -1,0 +1,14 @@
+" vim: set ft=vim list :
+" Execute this first:
+:Ists 4
+:let g:IndentTab_scopes = 'indent,commentprefix,string,comment'
+:let g:IndentTab_scopes = 'indent,commentprefix'
+
+" This is a comment                     .
+"	Indented Comment.
+    return filter(copy(a:snippets),
+    :"stridx(v:val.word, a:base) != -1 ||' .
+    \           "stridx(v:val.word, a:base) != -1 ||' .
+    \                   stridx(v:val.word, a:base) != -1 ||' .
+    \               'stridx(v:val.word, a:base) != -1 ||' .
+"     ^- ciw<Tab>...
