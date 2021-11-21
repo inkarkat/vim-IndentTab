@@ -1,0 +1,7 @@
+autoload/IndentTab.vim
+autoload/IndentTab/CommentPrefix.vim
+autoload/IndentTab/Info.vim
+autoload/IndentTab/SuperTabIntegration.vim
+autoload/IndentTab/Syntax.vim
+plugin/IndentTab.vim
+doc/IndentTab.txt
