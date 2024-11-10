@@ -117,7 +117,7 @@ https://github.com/inkarkat/vim-IndentTab/issues or email (address below).
 HISTORY
 ------------------------------------------------------------------------------
 
-##### 1.11    RELEASEME
+##### 1.11    10-Nov-2024
 - ENH: Support a:stopItemPattern in ingointegration#IsOnSyntaxItem(). Stop
   looking for comment syntax name below /FoldMarker$/.
 
@@ -138,7 +138,7 @@ __You need to update to ingo-library ([vimscript #4433](http://www.vim.org/scrip
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2008-2022 Ingo Karkat -
+Copyright: (C) 2008-2024 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;
